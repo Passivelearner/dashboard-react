@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { HashRouter, Routes, Route } from "react-router-dom";
+import Mainbody from "./components/Mainbody";
+import Layout from "./components/Layout";
+import { createTheme, ThemeProvider } from "@mui/material";
+import { useState } from "react";
+import { ColorModeContext } from "./context/ColorModeContext";
+
+const switchtheme = (theme) => {
+  return createTheme({
+    palette: {
+      mode : theme
+    }
+  })
+}
 
 function App() {
+
+  const [theme, setTheme] = useState('light')
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ColorModeContext.Provider value={setTheme}>
+      <ThemeProvider theme={switchtheme(theme)}>
+        <HashRouter>
+            <Routes>
+              <Route path="/" element={<Layout/>}>
+                <Route path="" element={<Mainbody/>}></Route>
+              </Route>
+            </Routes>
+        </HashRouter>
+        </ThemeProvider>
+      </ColorModeContext.Provider>
   );
 }
 
